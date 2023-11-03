@@ -10,15 +10,28 @@ char * token;
  * 
  */
 
-size_t string_split(char *text, char *separators, char *words[], size_t words_size){
-    size_t word_count;
+size_t string_split(char * text, char * separators, char ** words, size_t words_size){
+    /**
+     *  Gets a string, breaks it to a series of tokens using [separators] as the delimeter 
+     *  and stores the resulting string in an array.
+     *  If no string is given, it uses the string given in the last function call.
+     * 
+     *  Args:
+     *      char * text: Original string.
+     *      char * separators: Delimiters.
+     *      char ** words:  Array to store tokens
+     *      size_t words_size: Size of the array
+     * 
+     *  Return:
+     *      size_t: Number of strings in [words]
+     * 
+     */
+    unsigned word_count;
     if(text != NULL)
         token = strtok(text, separators);
     
     for(word_count = 0; (word_count < words_size) && (token != NULL); word_count++){
         words[word_count] = token;
-        //printf("[Pointer] words[%ld] = %p\n", word_count, words[word_count]);
-        //printf("[Value] words[%ld] = %s\n", word_count, words[word_count]);
         token = strtok(NULL, separators);
     }
     return word_count;

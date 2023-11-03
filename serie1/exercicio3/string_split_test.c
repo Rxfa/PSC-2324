@@ -9,7 +9,7 @@
  *
  *	$ gcc string_split_test.c string_split.c -o string_split_test -g -Wall -pedantic
  *
- *	$ ./bits_test
+ *	$ ./string_split_test_test
  */
 
 #include <stdio.h>

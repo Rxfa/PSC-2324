@@ -5,6 +5,17 @@
 #define FULL 0xffffffffffffffff
 
 unsigned long getmask(unsigned idx, unsigned len){
+    /**
+     * Calculates a mask out of a given length and starting index.
+     * 
+     * Args:
+     *      unsigned idx: Starting Index.
+     *      unsigned len: Length.
+     * 
+     * Return:
+     *      unsigned long: Calculated mask.
+     * 
+     */
     unsigned long mask = FULL;
     unsigned rshifts = len;
     unsigned lshifts = idx % ULONG_BIT;
@@ -16,7 +27,19 @@ unsigned long getmask(unsigned idx, unsigned len){
     return mask;
 }
 
-unsigned long getbits(unsigned long data[], unsigned index, unsigned length){
+unsigned long getbits(unsigned long * data, unsigned index, unsigned length){
+    /**
+     * Given a bit vector, gets the bits over a given range.
+     * 
+     * Args:
+     *      unsigned long * data: Bit vector.
+     *      unsigned index: Starting index to get bits from.
+     *      unsigned length: Number of bits to get, starting from the index.
+     * 
+     * Return:
+     *      unsigned long: Bits between the [index]nth position of [data] and the [index + length - 1]nth position of [data].
+     * 
+     */
     unsigned current_vector = index / ULONG_BIT;
     unsigned max_vector = (index+length) / ULONG_BIT;
     unsigned used_bits = ULONG_BIT - index;
@@ -28,6 +51,18 @@ unsigned long getbits(unsigned long data[], unsigned index, unsigned length){
 }
 
 void setbits(unsigned long data[], unsigned index, unsigned length, unsigned long val){
+    /**
+     * Given a bit vector, sets to 1 the bits over a given range.
+     * 
+     * Args:
+     *      unsigned long * data: Bit vector.
+     *      unsigned index: Starting index to set to 1 the bits from.
+     *      unsigned length: Number of bits to set to 1, starting from the index.
+     * 
+     * Return:
+     *      void: Sets to 1 the bits between the [index]nth position of [data] and the [index + length - 1]nth position of [data].
+     * 
+     */
     unsigned current_vector = index / ULONG_BIT;
     unsigned max_vector = (index + length) / ULONG_BIT;
     unsigned used_bits = ULONG_BIT - index;
