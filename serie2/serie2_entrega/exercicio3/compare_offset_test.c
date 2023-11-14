@@ -68,6 +68,8 @@ int main() {
 		if (received_result != test_array[i].expected_result) {
 			printf("[%zd] - Received: %d Expected: %d\n",
 				i, received_result, test_array[i].expected_result);
+		} else {
+			printf("[%zd] - OK\n", i);
 		}
 	}
 }
