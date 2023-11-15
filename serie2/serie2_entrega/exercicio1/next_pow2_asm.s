@@ -8,31 +8,27 @@
 		return mask << (x != mask);
 	}
 */
-
 	.global next_pow2
 	.text
 next_pow2:
-	bsr %rdi, %rcx
-	mov $1, %rax
-	shl %cl, %rax
-	cmp $0, %rdi
-	jz .L0_next_pow2
-	cmp %rax, %rdi
-	jna .L1_next_pow2
-.L1_next_pow2:
-	jmp .L3_next_pow2
-.L4_next_pow2:
-	shr $1, %rax
-.L3_next_pow2:
-	test %rax, %rdi
-	jz .L4_next_pow2
-.L2_next_pow2:
-	cmp %rax, %rdi
-	jz .L5_next_pow2
-	shl $1, %rax
-	jmp .L5_next_pow2
-.L0_next_pow2:
 	mov $0, %rax
-.L5_next_pow2:
+	mov $1, %rsi # mask = 1
+	bsr %rdi, %rcx 
+	shl %cl, %rsi # mask <<= ((sizeof mask * CHAR_BIT) - 1)
+	cmp $0, %rdi
+	je .L0_next_pow2 # return 0
+	cmp %rdi, %rsi
+	ja .L0_next_pow2 # return 0
+	mov %rsi, %rax
+	jmp .L1_next_pow2
+.L2_next_pow2:
+	shr $1, %rax # mask >>= 1
+.L1_next_pow2:
+	test %rax, %rdi # (x & mask) == 0
+	jz .L2_next_pow2
+	cmp %rax, %rdi # x != mask
+	jz .L0_next_pow2
+	shl $1, %rax # mask << 1
+.L0_next_pow2:
 	ret
 	.section .note.GNU-stack

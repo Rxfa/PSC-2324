@@ -35,6 +35,9 @@ int main() {
 		if (received_result != test_array[i].result)
 			printf("[%zu] Expected: %zx, receiced: %zx\n", i,
 				test_array[i].result, received_result);
+		else {
+			printf("[%ld] - OK \n", i);
+		}
 	}
 }
 
