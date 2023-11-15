@@ -34,7 +34,7 @@ my_strtok:
 	mov $0, %rax
 	cmpq $0, token(%rip) # p == NULL
 	jz .L0_my_strtok # return NULL
-	
+
 	mov token(%rip), %rsi
 	cmpq $0, (%rsi) # *p == 0
 	jz .L0_my_strtok # return NULL
@@ -67,12 +67,11 @@ my_strtok:
 	cmp $0, %rax # strchr(sep, *p) == NULL
 	jz .L4_my_strtok
 .L5_my_strtok:
-	# mov token(%rip), %rsi
-	# movq $0, 1(%rsi) # *p++ = 0
-	# movq $0, token(%rip)
-	# mov token(%rip), %rsi
-	# movq $0, (%rsi)
-	incq token(%rip)
+	# incq token(%rip)
+	movq token(%rip), %rax
+	leaq 1(%rax), %rdx
+	movq %rdx, token(%rip)
+	movb $0, (%rax)
 	mov %r12, %rax # return q
 .L0_my_strtok:
 	pop %r12
