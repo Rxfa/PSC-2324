@@ -28,52 +28,50 @@ my_strtok:
 	mov %rdi, %rbx
 	mov %rsi, %rbp
 	cmp $0, %rbx # str != NULL
-	jz .L6_my_strtok
+	je .L0_my_strtok
 	mov %rbx, token(%rip) # p = str
-.L6_my_strtok:
-	mov $0, %rax
+.L0_my_strtok:
 	cmpq $0, token(%rip) # p == NULL
-	jz .L0_my_strtok # return NULL
-
+	je .L7_my_strtok # return NULL
 	mov token(%rip), %rsi
 	cmpq $0, (%rsi) # *p == 0
-	jz .L0_my_strtok # return NULL
-	jmp .L1_my_strtok
-.L2_my_strtok:
+	je .L7_my_strtok # return NULL
+	jmp .L2_my_strtok
+.L3_my_strtok:
 	incq token(%rip) # ++p
-.L1_my_strtok:
+.L2_my_strtok:
 	mov token(%rip), %rsi
 	mov (%rsi), %rsi
 	mov %rbp, %rdi
 	callq strchr
 	cmpq $0, %rax # strchr(sep, *p) != NULL
-	jnz .L2_my_strtok
+	jne .L3_my_strtok
 	mov $0, %rdx
 	mov token(%rip), %rsi
 	cmpq $0, (%rsi) # *p == 0
-	cmove %rdx, %rax
-	jz .L0_my_strtok # return NULL
+	je .L7_my_strtok # return NULL
 	mov token(%rip), %r12 # char * q = p
-	jmp .L3_my_strtok
-.L4_my_strtok:
+	jmp .L4_my_strtok
+.L7_my_strtok:
+	mov $0, %rax
+	jmp .L1_my_strtok
+.L5_my_strtok:
 	incq token(%rip) # ++p
-.L3_my_strtok:
+.L4_my_strtok:
 	mov token(%rip), %rsi
 	mov (%rsi), %rsi
 	cmpq $0, %rsi # *p != 0
-	jz .L5_my_strtok
+	je .L6_my_strtok
 	mov %rbp, %rdi
 	callq strchr
 	cmp $0, %rax # strchr(sep, *p) == NULL
-	jz .L4_my_strtok
-.L5_my_strtok:
-	# incq token(%rip)
+	je .L5_my_strtok
+.L6_my_strtok:
 	movq token(%rip), %rax
-	leaq 1(%rax), %rdx
-	movq %rdx, token(%rip)
-	movb $0, (%rax)
+	movb $0, (%rax) # *p = 0
+	incq token(%rip) # *p++
 	mov %r12, %rax # return q
-.L0_my_strtok:
+.L1_my_strtok:
 	pop %r12
 	pop %rbp
 	pop %rbx
