@@ -19,12 +19,12 @@ struct {
 	size_t result_size;
 	char *words[4];
 } test_array[] = {
-	{" \t\n","", test_array[0].text, NULL},
-	{" \t\n","  aaa", test_array[1].text, test_array[1].text + 2},
-	{" \t\n","  aaa", NULL, NULL},
-	{" \t\n","aaa	bbb	", test_array[3].text, test_array[3].text},
-	{" \t\n","aaa	bbb	", NULL, test_array[3].text + 4},
-	{" \t\n","aaa	bbb	", NULL, NULL},
+	{" \t\n","", test_array[0].text, NULL},							// 0
+	{" \t\n","  aaa", test_array[1].text, test_array[1].text + 2},	// 1
+	{" \t\n","  aaa", NULL, NULL},									// 2 
+	{" \t\n","aaa	bbb	", test_array[3].text, test_array[3].text},	// 3 	
+	{" \t\n","aaa	bbb	", NULL, test_array[3].text + 4},			// 4
+	{" \t\n","aaa	bbb	", NULL, NULL}, 							// 5
 };
 
 int main() {
@@ -36,7 +36,7 @@ int main() {
 			printf("Your function currupted %s, that is a calee saved register\n",
 				register_name[result]);
 		if (test_array[i].token_ptr == NULL && received_result == NULL)
-			;	//printf("[%d] - OK\n", i);
+			printf("[%d] - OK\n", i);
 		else if (test_array[i].token_ptr == NULL && received_result != NULL)
 			printf("[%d] expected: NULL, received: %p\n", i, received_result);
 		else if (test_array[i].token_ptr != NULL && received_result == NULL)
@@ -44,7 +44,7 @@ int main() {
 		else if (strcmp(received_result, test_array[i].token_ptr) != 0)
 			printf("[%d] expected: %s, received: %s\n", i,
 				test_array[i].token_ptr, received_result);
-//		else
-//			printf("[%d] - OK\n", i);
+		else
+			printf("[%d] - OK, Result: %s\n", i, received_result);
 	}
 }
