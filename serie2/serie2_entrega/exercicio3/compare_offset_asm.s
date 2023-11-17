@@ -13,8 +13,8 @@ compare_offset:
 	mov (%rdi, %rsi, 8), %rdi	# values[i]
 	jmp .L0_compare_offset
 .L1_compare_offset:
-	add $value_size, %rdi
-	dec %edx
+	add $value_size, %rdi # values[i] += value_size
+	dec %edx # j--
 .L0_compare_offset:
 	cmp $0, %edx	# j == 0
 	jnz .L1_compare_offset

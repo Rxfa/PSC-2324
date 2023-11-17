@@ -130,8 +130,8 @@ static void print_result(size_t i) {
 		test_array[i].print(test_array[i].unsorted, test_array[i].size);
 		putchar('\n');
 	}
-//	else
-//		printf("[%zu] - OK\n", i);
+	else
+		printf("[%zu] - OK\n", i);
 }
 
 int main() {
