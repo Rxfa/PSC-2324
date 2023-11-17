@@ -52,9 +52,6 @@ my_strtok:
 	je .L7_my_strtok # return NULL
 	mov token(%rip), %r12 # char * q = p
 	jmp .L4_my_strtok
-.L7_my_strtok:
-	mov $0, %rax
-	jmp .L1_my_strtok
 .L5_my_strtok:
 	incq token(%rip) # ++p
 .L4_my_strtok:
@@ -71,6 +68,9 @@ my_strtok:
 	movb $0, (%rax) # *p = 0
 	incq token(%rip) # *p++
 	mov %r12, %rax # return q
+	jmp .L1_my_strtok
+.L7_my_strtok:
+	mov $0, %rax
 .L1_my_strtok:
 	pop %r12
 	pop %rbp
