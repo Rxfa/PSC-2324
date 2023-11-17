@@ -11,24 +11,19 @@ memswap:
 	push %rbx # one
 	push %rbp # other
 	push %r12 # width
-	sub %rdx, %rsp # tmp[width]
+	mov %rdx, %r12
+	sub %r12, %rsp # tmp[width]
 	mov %rdi, %rbx
 	mov %rsi, %rbp
-	mov %rdx, %r12
-	
 	mov %rsp, %rdi
 	mov %rbx, %rsi
-	mov %r12, %rdx
-	call memcpy
+	call memcpy # memcpy(tmp, one, width) 
 	mov %rbx, %rdi
 	mov %rbp, %rsi
-	mov %r12, %rdx
-	call memcpy
+	call memcpy # memcpy(one, other, width)
 	mov %rbp, %rdi
 	mov %rsp, %rsi
-	mov %r12, %rdx
-	call memcpy
-.L0_memswap:
+	call memcpy # memcpy(other, tmp, width)
 	add %r12, %rsp
 	pop %r12
 	pop %rbp
@@ -71,26 +66,22 @@ bubble_sort:
 	mov %rsi, %rbp
 	mov %rdx, %r12
 	mov %rcx, (%rsp)
-	xor %r13, %r13 # swap_flg = 0
-	cmp	$1, %rbp # nelements - 1 <= 0
+	mov  $0, %r13d # swap_flg = 0
+	cmp	$1, %ebp # nelements - 1 <= 0
 	jbe .L0_bubble_sort # return
-	mov %rbp, %rax
-	dec %rax # (nelements - 1)
-	mul %r12 # (nelements - 1) * width
-	add %rbx, %rax
-	mov %rax, %r14 # base + (nelements - 1) * width
+	lea -1(%rbp), %rax # (nelements - 1)
+	mul %r12d # (nelements - 1) * width
+	lea (%rax, %rbx), %r14 # base + (nelements - 1) * width
 	mov %rbx, %r15 # ptr = base
 	jmp .L1_bubble_sort
 .L2_bubble_sort:
 	mov %r15, %rdi
-	mov %r15, %rsi
-	add %r12, %rsi
+	lea (%r15, %r12), %rsi
 	call *(%rsp) # compare(ptr, ptr + width)
 	cmp $0, %eax # compare(ptr, ptr + width) > 0
 	jle .L3_bubble_sort
 	mov %r15, %rdi
-	mov %r15, %rsi
-	add %r12, %rsi
+	lea (%r15, %r12), %rsi
 	mov %r12, %rdx
 	call memswap # memswap(ptr, ptr + width, width)
 	mov $1, %r13d # swap_flg = 1
@@ -102,11 +93,10 @@ bubble_sort:
 	cmp $0, %r13d # swap_flg == 0
 	je .L0_bubble_sort # return
 	mov %rbx, %rdi
-	mov %rbp, %rsi
-	dec %rsi
+	lea -1(%rbp), %rsi
 	mov %r12, %rdx
 	mov (%rsp), %rcx
-	callq bubble_sort # bubble_sort(base, nelements - 1, width, compare)
+	call bubble_sort # bubble_sort(base, nelements - 1, width, compare)
 .L0_bubble_sort:
 	add $8, %rsp
 	pop %r15
