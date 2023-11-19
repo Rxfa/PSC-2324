@@ -11,8 +11,9 @@ memswap:
 	push %rbx # one
 	push %rbp # other
 	push %r12 # width
+	sub %rdx, %rsp # tmp[width]
+
 	mov %rdx, %r12
-	sub %r12, %rsp # tmp[width]
 	mov %rdi, %rbx
 	mov %rsi, %rbp
 	mov %rsp, %rdi
@@ -24,6 +25,7 @@ memswap:
 	mov %rbp, %rdi
 	mov %rsp, %rsi
 	call memcpy # memcpy(other, tmp, width)
+
 	add %r12, %rsp
 	pop %r12
 	pop %rbp
@@ -97,6 +99,7 @@ bubble_sort:
 	mov %r12, %rdx
 	mov (%rsp), %rcx
 	call bubble_sort # bubble_sort(base, nelements - 1, width, compare)
+
 .L0_bubble_sort:
 	add $8, %rsp
 	pop %r15

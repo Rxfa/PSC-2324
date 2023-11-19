@@ -15,9 +15,9 @@ next_pow2:
 	mov $1, %rsi # mask = 1
 	bsr %rdi, %rcx 
 	shl %cl, %rsi # mask <<= ((sizeof mask * CHAR_BIT) - 1)
-	cmp $0, %rdi
+	cmp $0, %rdi # x == 0
 	je .L0_next_pow2 # return 0
-	cmp %rdi, %rsi
+	cmp %rdi, %rsi # mask - x < 0
 	ja .L0_next_pow2 # return 0
 	mov %rsi, %rax
 	jmp .L1_next_pow2
@@ -27,7 +27,7 @@ next_pow2:
 	test %rax, %rdi # (x & mask) == 0
 	jz .L2_next_pow2
 	cmp %rax, %rdi # x != mask
-	jz .L0_next_pow2
+	je .L0_next_pow2
 	shl $1, %rax # mask << 1
 .L0_next_pow2:
 	ret

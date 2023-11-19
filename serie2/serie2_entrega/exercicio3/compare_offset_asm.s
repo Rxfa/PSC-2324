@@ -11,13 +11,8 @@ int compare_offset(struct values *values[], int i, int j, int k, struct values *
 compare_offset:
 	mov $0, %eax
 	mov (%rdi, %rsi, 8), %rdi	# values[i]
-	jmp .L0_compare_offset
-.L1_compare_offset:
-	add $value_size, %rdi # values[i] += value_size
-	dec %edx # j--
-.L0_compare_offset:
-	cmp $0, %edx	# j == 0
-	jnz .L1_compare_offset
+	imul $value_size, %edx # (values_size * j)
+	add %rdx, %rdi # values[i] + (values_size * j) => values[i][j]
 	mov (%rdi), %r9	# values[i][j]
 	cmp %ecx, %r9d		# values[i][j] - k > 0
 	jbe .L2_compare_offset
@@ -26,7 +21,7 @@ compare_offset:
 	mov (%rdi, %rcx, 2), %di		# values[i][j].offset[k]
 	mov (%r8, %rcx, 2), %r8w		# avalue->offset[k]
 	cmp %r8w, %di				# avalue->offset[k] == values[i][j].offset[k]
-	jnz .L2_compare_offset
+	jne .L2_compare_offset
 	mov $1, %eax
 .L2_compare_offset:
 	ret

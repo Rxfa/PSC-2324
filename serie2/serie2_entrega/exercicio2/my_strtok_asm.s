@@ -17,7 +17,7 @@ char *my_strtok(char *str, const char *sep){
 }
 */
 	.bss
-	token:
+	token: # static char * p
 		.space 8
 	.text
 	.global my_strtok
